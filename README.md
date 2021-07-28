@@ -11,7 +11,7 @@ Deploy using the OpenShift client ('oc')
 $ oc new-project mydemo
 
 # Add the .NET Core application
-$ oc new-app new-app --name=OpenShiftHrApp dotnet:3.1~https://github.com/ndgaikwad/OpenShiftHrOffice#master --context-dir HrOffice
+$ oc new-app --name=OpenShiftHrApp dotnet:3.1~https://github.com/ndgaikwad/OpenShiftHrOffice#master --context-dir HrOffice
 
 # Make the .NET Core application accessible externally and show the url
 $ oc expose service OpenShiftHrApp
