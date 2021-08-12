@@ -9,7 +9,7 @@ node('dotnetcore31') {
     checkout scm
   }
   stage('Build Image') {
-    sh "oc -n $DEV_PROJECTNAME start-build $BUILDCONFIGNAME --from-dir=../OpenShiftHrOffice/HrOffice/dist --follow"
+    sh "oc -n $DEV_PROJECTNAME start-build $BUILDCONFIGNAME --from-dir=../HrOffice/dist --follow"
     sh "oc -n $DEV_PROJECTNAME tag $DEV_PROJECTNAME/$IMAGE_NAME $UAT_PROJECTNAME/$UATIMAGENAME"
   }
 }
