@@ -8,14 +8,8 @@ node('dotnetcore31') {
   stage('Clone') {
     checkout scm
   }
-  stage('Restore') {
-    sh "dotnet build ./HrOffice/HrOffice.csproj"
-  }
-  stage('Publish') {
-    sh "dotnet publish ./HrOffice/HrOffice.csproj --no-restore  -c Release /p:MicrosoftNETPlatformLibrary=Microsoft.NETCore.App"
-  }
   stage('Build Image') {
-    sh "oc -n $DEV_PROJECTNAME start-build $BUILDCONFIGNAME --from-dir=./HrOffice/bin/Release/netcoreapp3.1/publish --follow"
+    sh "oc -n $DEV_PROJECTNAME start-build $BUILDCONFIGNAME --from-dir=../OpenShiftHrOffice/HrOffice/dist --follow"
     sh "oc -n $DEV_PROJECTNAME tag $DEV_PROJECTNAME/$IMAGE_NAME $UAT_PROJECTNAME/$UATIMAGENAME"
   }
 }
