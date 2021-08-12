@@ -1,0 +1,21 @@
+#!groovy
+def DEV_PROJECTNAME = "ndgaikwad-dev"
+def UAT_PROJECTNAME = "ndgaikwad-stage"
+def BUILDCONFIGNAME="hrappnil1"
+def IMAGE_NAME="hrappnil1:latest"
+def UATIMAGENAME = "hrappnil1:UATReady-1.0.0"
+node('dotnetcore31') {
+  stage('Clone') {
+    checkout scm
+  }
+  stage('Restore') {
+    sh "dotnet restore HrOffice.csproj --configfile nuget.config --force --verbosity d"
+  }
+  stage('Publish') {
+    sh "dotnet publish HrOffice.csproj --no-restore  -c Release /p:MicrosoftNETPlatformLibrary=Microsoft.NETCore.App"
+  }
+  stage('Build Image') {
+    sh "oc -n $DEV_PROJECTNAME start-build $BUILDCONFIGNAME --from-dir=./bin/Release/netcoreapp3.1/publish --follow"
+    sh "oc -n $DEV_PROJECTNAME tag $DEV_PROJECTNAME/$IMAGE_NAME $UAT_PROJECTNAME/$UATIMAGENAME"
+  }
+}
