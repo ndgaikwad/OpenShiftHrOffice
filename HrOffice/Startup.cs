@@ -39,9 +39,9 @@ namespace HrOffice
 
             var host = Configuration["DBHOST"] ?? "localhost";
             var port = Configuration["DBPORT"] ?? "3306";
-            var databasename = Configuration["DBNAME"] ?? "hrdbqa";
-            var userid = Configuration["DBUSER"] ?? "hrQaAPI";
-            var password = Configuration["DBPASSWORD"] ?? "MySqlhrQaAPI80";
+            var databasename = Configuration["DBNAME"] ?? "hrdb";
+            var userid = Configuration["DBUSER"] ?? "hrAPI";
+            var password = Configuration["DBPASSWORD"] ?? "MySqlhrAPI80";
 
             services.AddDbContext<EmpContext>(options =>
             {

@@ -1,6 +1,7 @@
 ﻿using HrOffice.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace HrOffice.Controllers
@@ -15,9 +16,30 @@ namespace HrOffice.Controllers
         }
 
         // GET: Employee
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string currentFilter,
+            string searchString, int? pageNumber)
         {
-            return View(await _context.Employee.ToListAsync());
+            //return View(await _context.Employee.ToListAsync());
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewData["CurrentFilter"] = searchString;
+
+            var emps = from e in _context.Employee
+                       select e;
+
+            if (!String.IsNullOrEmpty(searchString))
+                emps = emps.Where(e => e.Name.Contains(searchString));
+
+            int pageSize = 5;
+            return View(await PaginatedList<Emp>.CreateAsync(emps, pageNumber ?? 1, pageSize));
         }
 
         //GET : Employee/ create

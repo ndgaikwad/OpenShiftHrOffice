@@ -1,4 +1,4 @@
-﻿@model IEnumerable<HrOffice.Models.Emp>
+﻿@model PaginatedList<HrOffice.Models.Emp>
 
 @{
     ViewData["Title"] = "Index";
@@ -7,21 +7,30 @@
 <h2>Employee Master Details</h2>
 <hr />
 
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by name: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+            <input type="submit" value="Search" class="btn btn-default" /> |
+            <a asp-action="Index">Back to Full List</a>
+        </p>
+    </div>
+</form>
 
 <table class="table table-hover">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                Employee Name
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.EmailId)
+                Email
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Department)
+                Department
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Location)
+                Work Location
             </th>
             <th>
                 <a asp-action="AddOrEdit" class="btn btn-outline-sucess"><i class="far fa-plus-square"></i> Employee</a>
@@ -53,3 +62,22 @@
         }
     </tbody>
 </table>
+
+@{
+    var prevDisabled = !Model.PreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.NextPage ? "disabled" : "";
+}
+
+<a asp-action="Index"
+   asp-route-pageNumber="@(Model.PageIndex - 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @prevDisabled">
+    Previous
+</a>
+
+<a asp-action="Index"
+   asp-route-pageNumber="@(Model.PageIndex + 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @nextDisabled">
+    Next
+</a>
