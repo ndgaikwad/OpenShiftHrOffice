@@ -14,6 +14,7 @@ namespace HrOffice.Models
         public string Name { get; set; }
 
         [Required(ErrorMessage = "This field required")]
+        [DataType(DataType.EmailAddress)]
         [MaxLength(50)]
         [DisplayName("Email")]
         public string EmailId { get; set; }
