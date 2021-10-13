@@ -1,0 +1,95 @@
+﻿@model PaginatedList<HrOffice.Models.Subscription>
+
+@{
+    ViewData["Title"] = ViewData["Company"] + " Index";
+}
+
+<h2>Application Subsciptions </h2>
+<hr />
+
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by user name: <input type="text" name="SearchString" value="@ViewData["SubCurrentFilter"]" />
+            <input type="submit" value="Search" class="btn btn-default" /> |
+            <a asp-action="Index">Back to Full List</a>
+        </p>
+    </div>
+</form>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>
+                User Name
+            </th>
+            <th>
+                Company Name
+            </th>
+            <th>
+                DB Name
+            </th>
+            <th>
+                Email
+            </th>
+            <th>
+                User Password
+            </th>
+            <th>
+                Role
+            </th>
+            <th>
+                <a asp-action="NewOrEdit" class="btn btn-outline-sucess"><i class="far fa-plus-square"></i> Employee</a>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CompanyName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DBName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EmailId)
+                </td>
+                <td>
+                    ******************
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Role)
+                </td>
+                <td>
+                    <a asp-action="NewOrEdit" asp-route-id="@item.SubscriptionId"><i class="fa fa-marker fa-lg"></i></a>
+                    <a asp-action="Delete" asp-route-id="@item.SubscriptionId" class="text-danger ml-1"
+                       onclick="return confirm('Are you sure to delete this Subscription?')"><i class="fa fa-trash-alt fa-lg"></i></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@{
+    var prevDisabled = !Model.PreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.NextPage ? "disabled" : "";
+}
+
+<a asp-action="Index"
+   asp-route-pageNumber="@(Model.PageIndex - 1)"
+   asp-route-currentFilter="@ViewData["SubCurrentFilter"]"
+   class="btn btn-default @prevDisabled">
+    Previous
+</a>
+
+<a asp-action="Index"
+   asp-route-pageNumber="@(Model.PageIndex + 1)"
+   asp-route-currentFilter="@ViewData["SubCurrentFilter"]"
+   class="btn btn-default @nextDisabled">
+    Next
+</a>

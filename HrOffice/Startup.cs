@@ -39,9 +39,10 @@ namespace HrOffice
 
             var host = Configuration["DBHOST"] ?? "localhost";//mysqlhrdev//mysqlhrqa
             var port = Configuration["DBPORT"] ?? "3306";
-            var databasename = Configuration["DBNAME"] ?? "hrdbdev";
-            var userid = Configuration["DBUSER"] ?? "hrAPI";
-            var password = Configuration["DBPASSWORD"] ?? "MySqlhrAPI80";
+            var databasename = Configuration["DBNAME"] ?? "HrAdmin";
+            var userid = Configuration["DBUSER"] ?? "root"; // "hrAPI"
+            var password = Configuration["DBPASSWORD"] ?? "MsSqlRoot80"; // "MsSqlhrAPI80"
+
 
             services.AddDbContext<EmpContext>(options =>
             {
@@ -74,11 +75,14 @@ namespace HrOffice
             app.UseCookiePolicy();
 
             //context.Database.Migrate();
+
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Emp}/{action=Index}/{id?}");
+                    template: "{controller=Login}/{action=Login}");
+                //template: "{controller=Emp}/{action=Index}/{id?}");
             });
         }
 

@@ -9,6 +9,9 @@ namespace HrOffice.Models
 
         }
 
+
         public DbSet<Emp> Employee { get; set; }
+
+        public DbSet<Subscription> Subscriptions { get; set; }
     }
 }

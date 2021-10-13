@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - HrOffice</title>
+    <title>HrOffice - @ViewData["Title"]</title>
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
     </environment>
@@ -28,6 +28,7 @@
             background-color: #87cefa;
         }
 
+
         #login .container #login-row #login-column #login-box {
             margin-top: 120px;
             max-width: 400px;
@@ -44,7 +45,28 @@
                     margin-top: -85px;
                 }
     </style>
+    <style type="text/css">
+        .bs-example {
+            height: 220px;
+        }
 
+        .centerlook {
+            padding-left: 400px;
+            font-weight: bold;
+            width: 1000px;
+        }
+
+        .error {
+            padding-left: 400px;
+            font-weight: bold;
+            width: 1000px;
+            color: red;
+        }
+
+        .loginbtn {
+            padding-left: 500px;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -66,6 +88,10 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+                        @*<li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Subscription" asp-action="Index"></a>
+                            </li>*@
+
                     </ul>
                 </div>
             </div>

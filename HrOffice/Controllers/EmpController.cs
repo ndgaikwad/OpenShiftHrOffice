@@ -1,5 +1,6 @@
 ﻿using HrOffice.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,7 +9,7 @@ namespace HrOffice.Controllers
 {
     public class EmpController : Controller
     {
-        private readonly EmpContext _context;
+        private EmpContext _context;
 
         public EmpController(EmpContext context)
         {
@@ -31,7 +32,14 @@ namespace HrOffice.Controllers
             }
 
             ViewData["CurrentFilter"] = searchString;
+            /*session managment using 3 types session, view data/ view bag , & tempdata as below */
+            //HttpContext.Session.Set("CurrentFilter", searchString)
+            //HttpContext.Session.TryGetValue
+            //ViewData["CurrentFilter"] = searchString; 
+            //ViewData["CurrentFilter"] = searchString;
+            //TempData.Add()
 
+            _context.Database.GetDbConnection().ChangeDatabase("hrdbdev");
             var emps = from e in _context.Employee
                        select e;
 
@@ -45,6 +53,8 @@ namespace HrOffice.Controllers
         //GET : Employee/ create
         public IActionResult AddOrEdit(int id = 0)
         {
+            _context.Database.GetDbConnection().ChangeDatabase("hrdbdev");
+
             if (id == 0)
                 return View(new Emp());
             else
@@ -58,6 +68,7 @@ namespace HrOffice.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddOrEdit([Bind("EmpId,Name,EmailId,Department,Location")] Emp emp)
         {
+            _context.Database.GetDbConnection().ChangeDatabase("hrdbdev");
             if (ModelState.IsValid)
             {
                 if (emp.EmpId == 0)
@@ -74,6 +85,7 @@ namespace HrOffice.Controllers
         // GET: Employee/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            _context.Database.GetDbConnection().ChangeDatabase("hrdbdev");
             var emp = await _context.Employee.FindAsync(id);
             _context.Employee.Remove(emp);
             await _context.SaveChangesAsync();

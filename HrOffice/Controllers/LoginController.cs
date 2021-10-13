@@ -7,42 +7,67 @@ namespace HrOffice.Controllers
 {
     public class LoginController : Controller
     {
+        private readonly EmpContext _context;
+
+        public LoginController(EmpContext context)
+        {
+
+            _context = context;
+
+        }
         public IActionResult Login()
         {
             return View();
         }
 
-        public List<UserModel> PutValue()
+        public List<Subscription> PutValue()
         {
-            var users = new List<UserModel>
-            {
-                new UserModel{id=1,userName="nilesh",password="abc123"},
-                new UserModel{id=1,userName="ravi",password="abc123"},
-                new UserModel{id=1,userName="suraj",password="abc123"},
-                new UserModel{id=1,userName="test",password="abc123"}
-            };
+            var subs = from e in _context.Subscriptions
+                       select e;
+
+            var users = subs.ToList();
+            //{
+
+
+            //new UserModel{EmailId="nil@test.com",UserName="nilesh",UserPassword="abc123",CompanyName = "OgilvyHealth", DBName = "hrdbdev", Role = "Admin"},
+            //    new UserModel{EmailId="ravi@test.com",UserName="ravi",UserPassword="abc123",CompanyName = "OgilvyHealth", DBName = "hrdbdev" , Role = "Admin"},
+            //    new UserModel{EmailId="mukesh@test.com",UserName="mukesh",UserPassword="abc123",CompanyName = "OgilvyHealth", DBName = "hrdbdev" , Role = "User"}
+            //};
 
             return users;
         }
 
         [HttpPost]
-        public IActionResult Verify(UserModel usr)
+        public IActionResult Verify(Subscription usr)
         {
             var u = PutValue();
 
-            var ue = u.Where(u => u.userName.Equals(usr.userName));
-            var up = ue.Where(p => p.password.Equals(usr.password));
+            var ue = u.Where(u => u.EmailId.Equals(usr.EmailId));
+            var up = ue.Where(p => p.UserPassword.Equals(usr.UserPassword));
 
             if (up.Count() == 1)
             {
-
+                usr = up.First();
+                CacheProfile cache = new CacheProfile();
                 ViewBag.message = "Login Sucess";
-                return View("/Views/LoginEmp/IndexViews/Emp/Index");
+
+                ViewBag.companyname = up.First().CompanyName.ToString();
+                ViewBag.dbname = up.First().DBName.ToString();
+                ViewBag.role = up.First().Role.ToString();
+
+                if (up.First().Role.ToString().Equals("Admin"))
+                    return RedirectToAction("Index", "Subscription");
+                else
+                    return RedirectToAction("Index", "Emp");
+
+
+                //return View("/Views/LoginEmp/IndexViews/Emp/Index");
 
             }
             else
             {
-                ViewBag.message = "Login Failed";
+                ViewBag.NotValidUser = "Login Failed";
+                //ViewBag.message = "Login Failed";
                 return View("Login");
             }
         }
